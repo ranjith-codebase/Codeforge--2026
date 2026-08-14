@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
  * UpskillOn brand mark — an upward node path (learning / growth / discovery)
  * drawn as connected digital nodes inside a rounded tile.
  */
-export function BrandMark({ className }: { className?: string }) {
+export function BrandMark({ className }: { className?: string | undefined }) {
   return (
     <span
       className={cn(
@@ -29,7 +29,7 @@ export function BrandMark({ className }: { className?: string }) {
   );
 }
 
-export function BrandWordmark({ className }: { className?: string }) {
+export function BrandWordmark({ className }: { className?: string | undefined }) {
   return (
     <span className={cn("truncate font-display text-base font-bold tracking-tight sm:text-lg", className)}>
       Upskill<span className="text-primary">On</span>
@@ -37,7 +37,7 @@ export function BrandWordmark({ className }: { className?: string }) {
   );
 }
 
-export function BrandLockup({ className, markClassName }: { className?: string; markClassName?: string }) {
+export function BrandLockup({ className, markClassName }: { className?: string | undefined; markClassName?: string | undefined }) {
   return (
     <span className={cn("flex min-w-0 items-center gap-2", className)}>
       <BrandMark className={markClassName} />
