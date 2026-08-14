@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Menu, Moon, Sun, X, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BrandLockup } from "@/components/site/brand";
 import type { Theme } from "@/hooks/use-theme";
 
 const LINKS = [
   { href: "#home", label: "Home" },
   { href: "#events", label: "Events" },
+  { href: "#categories", label: "Categories" },
   { href: "#favorites", label: "Favorites" },
 ];
 
@@ -13,10 +15,10 @@ type Props = {
   theme: Theme;
   onToggleTheme: () => void;
   favoritesCount: number;
-  onRegisterClick: () => void;
+  onExploreClick: () => void;
 };
 
-export function Navbar({ theme, onToggleTheme, favoritesCount, onRegisterClick }: Props) {
+export function Navbar({ theme, onToggleTheme, favoritesCount, onExploreClick }: Props) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -31,17 +33,12 @@ export function Navbar({ theme, onToggleTheme, favoritesCount, onRegisterClick }
         aria-label="Main"
         className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-6"
       >
-        <a href="#home" className="flex min-w-0 items-center gap-2">
-          <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-primary font-display text-sm font-bold text-primary-foreground">
-            CF
-          </span>
-          <span className="truncate font-display text-base font-bold tracking-tight sm:text-lg">
-            CodeForge <span className="text-primary">WebSprint</span>
-          </span>
+        <a href="#home" className="min-w-0" aria-label="UpskillOn home">
+          <BrandLockup />
         </a>
 
         <div className="flex items-center gap-1 sm:gap-2">
-          <ul className="hidden items-center gap-1 md:flex">
+          <ul className="hidden items-center gap-1 lg:flex">
             {LINKS.map((link) => (
               <li key={link.href}>
                 <a
@@ -71,14 +68,14 @@ export function Navbar({ theme, onToggleTheme, favoritesCount, onRegisterClick }
             {theme === "dark" ? <Sun className="size-5" /> : <Moon className="size-5" />}
           </Button>
 
-          <Button className="hidden md:inline-flex" onClick={onRegisterClick}>
-            Register Now
+          <Button className="hidden lg:inline-flex" onClick={onExploreClick}>
+            Explore Events
           </Button>
 
           <Button
             variant="outline"
             size="icon"
-            className="min-h-11 min-w-11 md:hidden"
+            className="min-h-11 min-w-11 lg:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             aria-controls="mobile-menu"
@@ -90,7 +87,7 @@ export function Navbar({ theme, onToggleTheme, favoritesCount, onRegisterClick }
       </nav>
 
       {open && (
-        <div id="mobile-menu" className="animate-rise border-t border-border bg-surface md:hidden">
+        <div id="mobile-menu" className="animate-rise border-t border-border bg-surface lg:hidden">
           <ul className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-3">
             {LINKS.map((link) => (
               <li key={link.href}>
@@ -113,10 +110,10 @@ export function Navbar({ theme, onToggleTheme, favoritesCount, onRegisterClick }
                 className="w-full"
                 onClick={() => {
                   setOpen(false);
-                  onRegisterClick();
+                  onExploreClick();
                 }}
               >
-                Register Now
+                Explore Events
               </Button>
             </li>
           </ul>
