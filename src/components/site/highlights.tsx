@@ -27,8 +27,8 @@ export function Highlights({ onViewDetails }: { onViewDetails: (event: TechEvent
 
         <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {highlights.map((event, index) => (
-            <li key={event.id}>
-              <Reveal className={index === 1 ? "delay-100" : index === 2 ? "delay-200" : ""}>
+            <li key={event.id} className="h-full">
+              <Reveal className={`h-full ${index === 1 ? "delay-100" : index === 2 ? "delay-200" : ""}`}>
                 <div className="surface-card flex h-full flex-col p-5 transition-transform duration-300 hover:-translate-y-1">
                   <span className="text-xs font-semibold uppercase tracking-wider text-primary">
                     {event.category}
