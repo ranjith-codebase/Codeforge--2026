@@ -1,4 +1,4 @@
-import { CalendarDays, Clock, Heart, MapPin, Share2, Signal, Users } from "lucide-react";
+import { CalendarDays, Clock, GraduationCap, Heart, MapPin, Share2, Signal, Users } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,6 +38,7 @@ export function EventDetailsDialog({
     { icon: MapPin, label: "Venue", value: `${event.location} · ${event.mode}` },
     { icon: Users, label: "Seats", value: `${event.seats} available` },
     { icon: Signal, label: "Level", value: event.difficulty },
+    { icon: GraduationCap, label: "Eligibility", value: event.eligibility },
   ];
 
   return (
@@ -59,7 +60,7 @@ export function EventDetailsDialog({
               <item.icon className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
               <div className="min-w-0">
                 <dt className="text-xs text-muted-foreground">{item.label}</dt>
-                <dd className="truncate text-sm font-medium">{item.value}</dd>
+                <dd className="text-sm font-medium">{item.value}</dd>
               </div>
             </div>
           ))}

@@ -4,18 +4,21 @@ import { Toaster } from "@/components/ui/sonner";
 import { Navbar } from "@/components/site/navbar";
 import { Hero } from "@/components/site/hero";
 import { Highlights } from "@/components/site/highlights";
+import { CategoriesSection } from "@/components/site/categories-section";
 import { EventsSection } from "@/components/site/events-section";
 import { FavoritesSection } from "@/components/site/favorites-section";
 import { RegistrationSection } from "@/components/site/registration-section";
 import { CommunitySection } from "@/components/site/community-section";
+import { BrandLockup } from "@/components/site/brand";
 import { useTheme } from "@/hooks/use-theme";
 import { useFavorites } from "@/hooks/use-favorites";
 import { EventDetailsDialog } from "@/components/site/event-details-dialog";
-import type { TechEvent } from "@/data/events";
+import type { EventCategory, TechEvent } from "@/data/events";
+import { ALL_CATEGORIES, DEFAULT_SORT, type SortKey } from "@/lib/event-filters";
 
-const TITLE = "CodeForge WebSprint 2026 — Campus Tech Event Portal";
+const TITLE = "UpskillOn — Discover Tech Events, Hackathons & Workshops";
 const DESCRIPTION =
-  "Discover, save and register for campus hackathons, AI labs, CTFs and cloud bootcamps at CodeForge WebSprint 2026.";
+  "UpskillOn helps students discover, save and register for hackathons, AI labs, workshops, CTFs and other technology events.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -31,9 +34,21 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+const FOOTER_LINKS = [
+  { href: "#home", label: "Home" },
+  { href: "#events", label: "Events" },
+  { href: "#categories", label: "Categories" },
+  { href: "#favorites", label: "Favorites" },
+  { href: "#register", label: "Register" },
+];
+
 function Index() {
   const { theme, toggleTheme } = useTheme();
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
+
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState<string>(ALL_CATEGORIES);
+  const [sort, setSort] = useState<SortKey>(DEFAULT_SORT);
 
   const [selectedEventId, setSelectedEventId] = useState("");
   const [detailsEvent, setDetailsEvent] = useState<TechEvent | null>(null);
@@ -41,13 +56,34 @@ function Index() {
 
   const formRef = useRef<HTMLFormElement | null>(null);
   const nameRef = useRef<HTMLInputElement | null>(null);
+  const searchRef = useRef<HTMLInputElement | null>(null);
+
+  const scrollTo = (id: string) =>
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  const goToEvents = () => {
+    scrollTo("events");
+    window.setTimeout(() => searchRef.current?.focus({ preventScroll: true }), 400);
+  };
 
   const goToRegistration = (event?: TechEvent) => {
     if (event) setSelectedEventId(event.id);
     window.setTimeout(() => {
-      document.getElementById("register")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      scrollTo("register");
       nameRef.current?.focus({ preventScroll: true });
     }, 60);
+  };
+
+  const selectCategory = (next: EventCategory) => {
+    setCategory(next);
+    setQuery("");
+    window.setTimeout(() => scrollTo("events"), 40);
+  };
+
+  const clearFilters = () => {
+    setQuery("");
+    setCategory(ALL_CATEGORIES);
+    setSort(DEFAULT_SORT);
   };
 
   const openDetails = (event: TechEvent) => {
@@ -61,13 +97,22 @@ function Index() {
         theme={theme}
         onToggleTheme={toggleTheme}
         favoritesCount={favorites.length}
-        onRegisterClick={() => goToRegistration()}
+        onExploreClick={goToEvents}
       />
 
       <main>
-        <Hero onRegisterClick={() => goToRegistration()} />
+        <Hero onExploreClick={goToEvents} />
         <Highlights onViewDetails={openDetails} />
+        <CategoriesSection onSelectCategory={selectCategory} />
         <EventsSection
+          query={query}
+          onQueryChange={setQuery}
+          category={category}
+          onCategoryChange={setCategory}
+          sort={sort}
+          onSortChange={setSort}
+          onClearFilters={clearFilters}
+          searchRef={searchRef}
           isFavorite={isFavorite}
           onToggleFavorite={toggleFavorite}
           onRegister={goToRegistration}
@@ -88,29 +133,26 @@ function Index() {
         <CommunitySection />
       </main>
 
-      <footer className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+      <footer className="border-t border-border">
+        <div className="mx-auto grid max-w-6xl gap-6 px-4 py-10 sm:px-6 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:items-start">
           <div className="min-w-0">
-            <p className="font-display text-sm font-bold">CodeForge WebSprint 2026</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              A frontend-only student event portal. No accounts, no backend.
+            <BrandLockup />
+            <p className="mt-3 max-w-sm text-sm text-muted-foreground">
+              Discover technology events that help you learn, build and grow. Frontend-only student
+              project — no accounts, no backend.
             </p>
           </div>
-          <nav aria-label="Footer" className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-            <a className="transition-colors hover:text-foreground" href="#home">
-              Home
-            </a>
-            <a className="transition-colors hover:text-foreground" href="#events">
-              Events
-            </a>
-            <a className="transition-colors hover:text-foreground" href="#favorites">
-              Favorites
-            </a>
-            <a className="transition-colors hover:text-foreground" href="#register">
-              Register
-            </a>
+          <nav aria-label="Footer" className="flex flex-wrap gap-4 text-sm text-muted-foreground md:justify-end">
+            {FOOTER_LINKS.map((link) => (
+              <a key={link.href} className="transition-colors hover:text-foreground" href={link.href}>
+                {link.label}
+              </a>
+            ))}
           </nav>
         </div>
+        <p className="mx-auto max-w-6xl px-4 pb-8 text-xs text-muted-foreground sm:px-6">
+          © {new Date().getFullYear()} UpskillOn. Built for the CodeForge WebSprint 2026 assignment.
+        </p>
       </footer>
 
       <EventDetailsDialog
@@ -121,6 +163,7 @@ function Index() {
         onToggleFavorite={toggleFavorite}
         onRegister={goToRegistration}
       />
+
       <Toaster />
     </div>
   );

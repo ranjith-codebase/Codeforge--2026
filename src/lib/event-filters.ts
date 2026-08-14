@@ -3,13 +3,24 @@ import type { TechEvent } from "@/data/events";
 export type SortKey = "date-asc" | "date-desc" | "name-asc" | "name-desc";
 
 export const SORT_OPTIONS: { value: SortKey; label: string }[] = [
-  { value: "date-asc", label: "Date: Soonest" },
-  { value: "date-desc", label: "Date: Latest" },
-  { value: "name-asc", label: "Name: A–Z" },
-  { value: "name-desc", label: "Name: Z–A" },
+  { value: "date-asc", label: "Soonest" },
+  { value: "date-desc", label: "Latest" },
+  { value: "name-asc", label: "Name A–Z" },
+  { value: "name-desc", label: "Name Z–A" },
 ];
 
 export const ALL_CATEGORIES = "All Categories";
+export const DEFAULT_SORT: SortKey = "date-asc";
+
+function matchesQuery(event: TechEvent, q: string) {
+  if (q === "") return true;
+  return (
+    event.name.toLowerCase().includes(q) ||
+    event.description.toLowerCase().includes(q) ||
+    event.category.toLowerCase().includes(q) ||
+    event.tags.some((tag) => tag.toLowerCase().includes(q))
+  );
+}
 
 export function filterAndSortEvents(
   events: readonly TechEvent[],
@@ -17,13 +28,12 @@ export function filterAndSortEvents(
 ): TechEvent[] {
   const q = query.trim().toLowerCase();
 
-  const result = events.filter((event) => {
-    const matchesQuery = q === "" || event.name.toLowerCase().includes(q);
-    const matchesCategory = category === ALL_CATEGORIES || event.category === category;
-    return matchesQuery && matchesCategory;
-  });
+  const result = events.filter(
+    (event) =>
+      matchesQuery(event, q) && (category === ALL_CATEGORIES || event.category === category),
+  );
 
-  return result.sort((a, b) => {
+  return [...result].sort((a, b) => {
     switch (sort) {
       case "date-desc":
         return b.date.localeCompare(a.date);

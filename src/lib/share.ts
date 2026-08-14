@@ -5,8 +5,8 @@ type Notify = { success: (msg: string) => void; error: (msg: string) => void };
 export async function shareEvent(event: TechEvent, notify: Notify) {
   const url = `${window.location.origin}${window.location.pathname}#events`;
   const shareData = {
-    title: `${event.name} — CodeForge WebSprint 2026`,
-    text: `Check out ${event.name} (${event.category}) at CodeForge WebSprint 2026.`,
+    title: `${event.name} on UpskillOn`,
+    text: `Check out ${event.name} (${event.category}) on UpskillOn — discover, save and register for tech events.`,
     url,
   };
 
