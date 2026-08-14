@@ -77,13 +77,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "CodeForge WebSprint 2026 — Campus Tech Event Portal" },
+      { title: "UpskillOn — Discover Tech Events, Hackathons & Workshops" },
       {
         name: "description",
         content:
-          "Discover, save and register for campus hackathons, AI labs, CTFs and cloud bootcamps.",
+          "Discover, save and register for hackathons, AI labs, workshops and other technology events.",
       },
-      { name: "author", content: "CodeForge Student Chapter" },
+      { name: "author", content: "UpskillOn" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
