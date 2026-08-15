@@ -18,8 +18,20 @@ export function writeStorage(key: string, value: unknown) {
   }
 }
 
+export function removeStorage(key: string) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(key);
+  } catch {
+    /* ignore */
+  }
+}
+
 export const STORAGE_KEYS = {
-  theme: "codeforge.theme",
-  favorites: "codeforge.favorites",
-  registrations: "codeforge.registrations",
+  theme: "upskillon.theme",
+  users: "upskillon.users",
+  session: "upskillon.session",
+  favorites: "upskillon.favorites",
+  registrations: "upskillon.registrations",
+  recent: "upskillon.recent",
 } as const;
