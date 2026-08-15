@@ -15,6 +15,7 @@ import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MyRegistrationsRouteImport } from './routes/my-registrations'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
@@ -50,6 +51,11 @@ const MyRegistrationsRoute = MyRegistrationsRouteImport.update({
   path: '/my-registrations',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/favorites': typeof FavoritesRoute
   '/login': typeof LoginRoute
   '/my-registrations': typeof MyRegistrationsRoute
+  '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/registration/$eventId': typeof RegistrationEventIdRoute
@@ -90,6 +97,7 @@ export interface FileRoutesByTo {
   '/favorites': typeof FavoritesRoute
   '/login': typeof LoginRoute
   '/my-registrations': typeof MyRegistrationsRoute
+  '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/registration/$eventId': typeof RegistrationEventIdRoute
@@ -103,6 +111,7 @@ export interface FileRoutesById {
   '/favorites': typeof FavoritesRoute
   '/login': typeof LoginRoute
   '/my-registrations': typeof MyRegistrationsRoute
+  '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/events/$eventId': typeof EventsEventIdRoute
   '/registration/$eventId': typeof RegistrationEventIdRoute
@@ -117,6 +126,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/login'
     | '/my-registrations'
+    | '/profile'
     | '/signup'
     | '/events/$eventId'
     | '/registration/$eventId'
@@ -129,6 +139,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/login'
     | '/my-registrations'
+    | '/profile'
     | '/signup'
     | '/events/$eventId'
     | '/registration/$eventId'
@@ -141,6 +152,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/login'
     | '/my-registrations'
+    | '/profile'
     | '/signup'
     | '/events/$eventId'
     | '/registration/$eventId'
@@ -154,6 +166,7 @@ export interface RootRouteChildren {
   FavoritesRoute: typeof FavoritesRoute
   LoginRoute: typeof LoginRoute
   MyRegistrationsRoute: typeof MyRegistrationsRoute
+  ProfileRoute: typeof ProfileRoute
   SignupRoute: typeof SignupRoute
   EventsEventIdRoute: typeof EventsEventIdRoute
   RegistrationEventIdRoute: typeof RegistrationEventIdRoute
@@ -204,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyRegistrationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
@@ -242,6 +262,7 @@ const rootRouteChildren: RootRouteChildren = {
   FavoritesRoute: FavoritesRoute,
   LoginRoute: LoginRoute,
   MyRegistrationsRoute: MyRegistrationsRoute,
+  ProfileRoute: ProfileRoute,
   SignupRoute: SignupRoute,
   EventsEventIdRoute: EventsEventIdRoute,
   RegistrationEventIdRoute: RegistrationEventIdRoute,
