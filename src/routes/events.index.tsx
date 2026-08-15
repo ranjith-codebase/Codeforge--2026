@@ -28,17 +28,17 @@ const TITLE = "Explore Events — UpskillOn";
 const DESCRIPTION =
   "Search, filter and sort hackathons, workshops, competitions and technology experiences on UpskillOn.";
 
-type EventSearch = { q: string; category: string; mode: string; sort: SortKey };
+type EventSearch = { q?: string; category?: string; mode?: string; sort?: SortKey };
 
 export const Route = createFileRoute("/events/")({
-  validateSearch: (search: Record<string, unknown>): EventSearch => ({
-    q: typeof search["q"] === "string" ? search["q"] : "",
-    category: typeof search["category"] === "string" ? search["category"] : ALL_CATEGORIES,
-    mode: typeof search["mode"] === "string" ? search["mode"] : ALL_MODES,
-    sort: SORT_OPTIONS.some((o) => o.value === search["sort"])
-      ? (search["sort"] as SortKey)
-      : DEFAULT_SORT,
-  }),
+  validateSearch: (search: Record<string, unknown>): EventSearch => {
+    const next: EventSearch = {};
+    if (typeof search["q"] === "string" && search["q"]) next.q = search["q"];
+    if (typeof search["category"] === "string" && search["category"]) next.category = search["category"];
+    if (typeof search["mode"] === "string" && search["mode"]) next.mode = search["mode"];
+    if (SORT_OPTIONS.some((o) => o.value === search["sort"])) next.sort = search["sort"] as SortKey;
+    return next;
+  },
   head: () => ({
     meta: [
       { title: TITLE },
@@ -51,11 +51,25 @@ export const Route = createFileRoute("/events/")({
 });
 
 function EventsPage() {
-  const { q, category, mode, sort } = Route.useSearch();
-  const navigate = useNavigate({ from: "/events" });
+  const search = Route.useSearch();
+  const q = search.q ?? "";
+  const category = search.category ?? ALL_CATEGORIES;
+  const mode = search.mode ?? ALL_MODES;
+  const sort = search.sort ?? DEFAULT_SORT;
+  const navigate = useNavigate({ from: "/events/" });
 
-  const setSearch = (patch: Partial<EventSearch>) =>
-    navigate({ search: (prev) => ({ ...prev, ...patch }), replace: true });
+  const setSearch = (patch: EventSearch) =>
+    navigate({
+      search: (prev: EventSearch) => {
+        const next: EventSearch = { ...prev, ...patch };
+        if (!next.q) delete next.q;
+        if (!next.category || next.category === ALL_CATEGORIES) delete next.category;
+        if (!next.mode || next.mode === ALL_MODES) delete next.mode;
+        if (!next.sort || next.sort === DEFAULT_SORT) delete next.sort;
+        return next;
+      },
+      replace: true,
+    });
 
   const visible = useMemo(
     () => filterAndSortEvents(EVENTS, { query: q, category, sort, mode }),
