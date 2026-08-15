@@ -44,7 +44,8 @@ function LoginPage() {
       return;
     }
     toast.success("Welcome back!");
-    navigate({ to: redirect ?? "/events", search: redirect ? undefined : {} });
+    if (redirect) navigate({ href: redirect });
+    else navigate({ to: "/events" });
   };
 
   return (
